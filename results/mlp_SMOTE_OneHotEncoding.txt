@@ -1,0 +1,39 @@
+Training set: 125973 records, 42 columns
+Test set:     22544 records, 42 columns
+
+Features: 40
+
+Training set class distribution:
+category
+Normal    67343
+DoS       45927
+Probe     11656
+R2L         995
+U2R          52
+Name: count, dtype: int64
+
+Test set class distribution:
+category
+Normal    9711
+DoS       7460
+R2L       2885
+Probe     2421
+U2R         67
+Name: count, dtype: int64
+MLP Cross-Validation F1 Macro Scores: [0.87668342 0.86481024 0.87759611 0.90947104 0.89351269]
+MLP Cross-Validation F1 Macro Mean Score: 0.8844
+MLP Cross-Validation F1 Macro Std Dev: 0.0155
+Classification Report:
+              precision    recall  f1-score   support
+
+         DoS       0.97      0.83      0.90      7460
+      Normal       0.67      0.96      0.79      9711
+       Probe       0.76      0.63      0.69      2421
+         R2L       0.79      0.07      0.14      2885
+         U2R       0.41      0.27      0.32        67
+
+    accuracy                           0.77     22544
+   macro avg       0.72      0.55      0.57     22544
+weighted avg       0.80      0.77      0.73     22544
+
+Test Macro F1 Score: 0.5689181104542953

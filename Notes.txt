@@ -1,0 +1,6 @@
+The column num_outbound_cmds is always zero across the entire dataset and should be dropped during preprocessing.
+
+
+Macro F1 = (F1_Normal + F1_DoS + F1_Probe + F1_R2L + F1_U2R) / 5
+
+Cross-validation on the training set is mandatory
