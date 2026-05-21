@@ -1,0 +1,75 @@
+Loading data...
+Training set: 125973 records, 42 columns
+Test set:     22544 records, 42 columns
+
+Features: 40
+
+Training set class distribution:
+category
+Normal    67343
+DoS       45927
+Probe     11656
+R2L         995
+U2R          52
+Name: count, dtype: int64
+
+Test set class distribution:
+category
+Normal    9711
+DoS       7460
+R2L       2885
+Probe     2421
+U2R         67
+Name: count, dtype: int64
+
+Running RandomizedSearchCV for main MLP model...
+Fitting 3 folds for each of 8 candidates, totalling 24 fits
+
+Best main-model hyperparameters:
+{'smote__k_neighbors': 3, 'select_k_best__k': 70, 'mlp__learning_rate_init': 0.0005, 'mlp__hidden_layer_sizes': (160, 80), 'mlp__batch_size': 256, 'mlp__alpha': 0.0005, 'correlation_filter__threshold': 0.98}
+Best main-model tuning CV F1 Macro Score: 0.8975
+
+Main MLP Cross-Validation F1 Macro Scores: [0.86188504 0.90458125 0.95069676 0.8624285  0.93142692]
+Main MLP Cross-Validation F1 Macro Mean Score: 0.9022
+Main MLP Cross-Validation F1 Macro Std Dev: 0.0358
+
+Training Normal-vs-R2L specialist:
+category
+Normal    67343
+R2L         995
+Name: count, dtype: int64
+Specialist Normal-vs-R2L CV F1 Macro Scores: [0.99357809 0.99357809 0.99227444 0.99091869 0.98699392]
+Specialist Normal-vs-R2L CV F1 Macro Mean Score: 0.9915
+
+Two-stage overrides Normal -> R2L: 27
+R2L override threshold: 0.35
+
+Main MLP Classification Report:
+              precision    recall  f1-score   support
+
+         DoS       0.91      0.87      0.89      7460
+      Normal       0.70      0.92      0.79      9711
+       Probe       0.75      0.61      0.67      2421
+         R2L       0.97      0.17      0.29      2885
+         U2R       0.25      0.48      0.33        67
+
+    accuracy                           0.77     22544
+   macro avg       0.72      0.61      0.60     22544
+weighted avg       0.81      0.77      0.75     22544
+
+Main MLP Test Macro F1 Score: 0.59563293438158
+
+Two-Stage MLP + Normal/R2L Random Forest Classification Report:
+              precision    recall  f1-score   support
+
+         DoS       0.91      0.87      0.89      7460
+      Normal       0.70      0.92      0.79      9711
+       Probe       0.75      0.61      0.67      2421
+         R2L       0.97      0.18      0.31      2885
+         U2R       0.25      0.48      0.33        67
+
+    accuracy                           0.78     22544
+   macro avg       0.72      0.61      0.60     22544
+weighted avg       0.81      0.78      0.75     22544
+
+Two-Stage Test Macro F1 Score: 0.5983787893033218
