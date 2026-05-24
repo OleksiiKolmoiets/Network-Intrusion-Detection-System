@@ -409,6 +409,49 @@ plt.tight_layout()
 plt.savefig("confusion_matrix_chained_r2l.png", dpi=150)
 plt.close()
 
+# ==============================================================
+# 14. CROSS-VALIDATION (MACRO F1)
+# ==============================================================
+
+from sklearn.model_selection import StratifiedKFold
+from sklearn.pipeline import Pipeline
+
+print("\nRunning 5-fold cross-validation on training data...")
+
+cv_pipeline = Pipeline([
+    ("preprocessor", ColumnTransformer(
+        transformers=[
+            ("cat", OneHotEncoder(handle_unknown="ignore"), cat_cols),
+            ("num", "passthrough", [col for col in X_train.columns if col not in cat_cols])
+        ]
+    )),
+    ("classifier", XGBClassifier(
+        objective="multi:softprob",
+        num_class=5,
+        eval_metric="mlogloss",
+        random_state=42,
+        n_jobs=-1,
+        **params
+    ))
+])
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+y_train_enc_full = target_encoder.transform(y_train)
+
+cv_f1_scores = []
+for fold, (train_idx, val_idx) in enumerate(skf.split(X_train, y_train_enc_full), 1):
+    X_fold_train, X_fold_val = X_train.iloc[train_idx], X_train.iloc[val_idx]
+    y_fold_train, y_fold_val = y_train_enc_full[train_idx], y_train_enc_full[val_idx]
+
+    cv_pipeline.fit(X_fold_train, y_fold_train)
+    y_fold_pred = cv_pipeline.predict(X_fold_val)
+    fold_f1 = f1_score(y_fold_val, y_fold_pred, average="macro")
+    cv_f1_scores.append(fold_f1)
+    print(f"  Fold {fold}: Macro F1 = {fold_f1:.4f}")
+
+print(f"\nCross-Validation Macro F1: {np.mean(cv_f1_scores):.4f} +/- {np.std(cv_f1_scores):.4f}")
+
+
 
 
 
